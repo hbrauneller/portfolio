@@ -2,6 +2,14 @@
     background-color: #D3DBFB;
 }
 
+#caption {
+  font-weight: bold;
+  font-style: italic;
+  z-index: 10;
+  position: absolute;
+  bottom: 15px;
+  left: 1200px;
+}
 
 #wall {
   z-index: 0;
