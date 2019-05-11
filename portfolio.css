@@ -1,0 +1,65 @@
+.container-fluid {
+    background-color: #D3DBFB;
+}
+
+
+#wall {
+  z-index: 0;
+  margin-left: 80px;
+}
+
+#me {
+  z-index: 10;
+  position: absolute;
+  bottom: 80px;
+  left: 700px;
+}
+
+#yel {
+  z-index: 0;
+  }
+
+#res {
+  z-index: 10;
+  position: absolute;
+  bottom: 280px;
+  left: 150px;
+  height: 70px; 
+  width: 70px;
+}
+
+#pwk {
+z-index: 10;
+position: absolute;
+bottom: 150px;
+left: 150px;
+height: 60px;
+width: 220px;
+}
+
+
+.text {
+    font-family:  'Montserrat Alternates', sans-serif;
+    position: absolute;
+    top: 250px;
+    left: 300px;
+    width: 100%;
+    margin: 0 auto;
+    width: 500px;
+    height: 50px; 
+  }
+
+.text2 {
+    font-family:  'Montserrat Alternates', sans-serif;
+    position: absolute;
+    top: 200px;
+    left: 100px;
+    width: 100%;
+    margin: 0 auto;
+    width: 500px;
+    height: 50px;
+  }
+
+  .navbar {
+    padding: 0; 
+  }
