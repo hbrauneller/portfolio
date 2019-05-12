@@ -1,0 +1,56 @@
+
+<!-- saved from url=(0089)https://photos.shutterfly.com/pmc_momentdb_server.html?subdomain=photos&domain=shutterfly -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  
+</head>
+<body>
+<script type="text/javascript" src="./document.currentScript.min.js.download"></script>
+<script type="text/javascript" src="./currentExecutingScript.min.js.download"></script>
+  <script type="text/javascript">
+    (function(){
+      function startCommunicator() {
+        require(['server/communicator'], function (Communicator) {
+          var params = window.location.href.split('?')[1].split('&');
+          var subdomain = params[0].split('=')[1];
+          var domain;
+          if (params.length == 2) {
+            domain = params[1].split('=')[1];
+          }
+          
+          window.communicator = new Communicator(subdomain, domain);
+        });
+      }
+      function calculateEnv() {
+        var hostname = window.location.hostname;
+        var env = 'prod';
+        var match = hostname.match(/^(.+).shutterfly.com$/);
+        var subdomain = match ? match[1] : "";
+        if (subdomain) {
+          var split = subdomain.split('.');
+          if (split.length > 1) {
+            env = split[1];
+          } else {
+            env = (subdomain === 'photos') ? 'prod' : subdomain;
+          }
+        } 
+        if (env === 'local') {
+          env = 'beta';
+        }
+        return env;
+      
+      }
+      var script = document.createElement('script');
+      var env = calculateEnv();
+      var url = "//d25wcz1jocbade.cloudfront.net/" + env + "/pmc-momentdb/server_app.js";
+      if (window.location.hostname == 'pmc.local.thislife.com') {
+        url = "//pmc.local.thislife.com/assets/server_app.js";
+      }
+      
+      
+      script.src = url;
+      script.onload = startCommunicator;
+      document.currentScript.parentElement.appendChild(script);
+    })();
+  </script><script src="./server_app.js.download"></script>
+
+</body></html>

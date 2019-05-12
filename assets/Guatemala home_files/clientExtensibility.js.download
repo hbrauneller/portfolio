@@ -1,0 +1,363 @@
+var url = window.location.href;
+if (!url.match(/^https:\/\/(www\.)?photos.(.*\.)?shutterfly.com/i)) {
+    var mcxSiteInterceptParameters = {
+        surveyURL: "https://shutterfly.allegiancetech.com/cgi-bin/qwebcorporate.dll?idx=G3VG8F",
+        placeholderURL: 'https://shutterfly.allegiancetech.com/cgi-bin/qwebcorporate.dll?idx=RJ898A',
+        showOnLoad: true,
+        invitationID: 'mcxInviteModal',
+        probability: 6,
+        width: 900,
+        height: 600,
+        expireDaysIfYes: 30, 
+        expireDaysIfNo: 30, 
+        delay: 10000, // 10 sec
+        waitUntilClose: true,
+        pageVisit: 1,
+        cookieID: '',
+        enabled: true,
+    }
+} else {
+    var mcxSiteInterceptParameters = {
+        surveyURL: "https://shutterfly.allegiancetech.com/cgi-bin/qwebcorporate.dll?idx=G3VG8F",
+        placeholderURL: 'https://shutterfly.allegiancetech.com/cgi-bin/qwebcorporate.dll?idx=RJ898A',
+        showOnLoad: true,
+        invitationID: 'mcxInviteModal',
+        probability: 2,
+        width: 900,
+        height: 600,
+        expireDaysIfYes: 30, 
+        expireDaysIfNo: 30, 
+        delay: 10000, // 10 sec
+        waitUntilClose: true,
+        pageVisit: 1,
+        cookieID: '',
+        enabled: true,
+    }
+}
+
+window.mcxAddModal = function () {
+
+    // Only load the invite on certain pages
+    var url = window.location.href;
+    if (   !url.match(/^https:\/\/(www\.)?(beta\.)?shutterfly\.com\/cards-stationery/i)
+        && !url.match(/^https:\/\/(www\.)?(beta\.)?shutterfly\.com\/tinyprints/i)
+        && !url.match(/^https:\/\/(www\.)?(beta\.)?shutterfly\.com\/wedding/i)
+        && !url.match(/^https:\/\/(www\.)?(beta\.)?shutterfly\.com\/personalized-gifts/i)
+        && !url.match(/^https:\/\/(www\.)?(beta\.)?shutterfly\.com\/photo-gifts/i)
+        && !url.match(/^https:\/\/(www\.)?(beta\.)?shutterfly\.com\/pets/i)
+        && !url.match(/^https:\/\/(www\.)?(beta\.)?shutterfly\.com\/kids/i)
+        && !url.match(/^https:\/\/(www\.)?(beta\.)?shutterfly\.com\/home-decor/i)
+        && !url.match(/^https:\/\/(www\.)?(beta\.)?shutterfly\.com\/prints/i)
+        && !url.match(/^https:\/\/(www\.)?(beta\.)?shutterfly\.com\/photo-books/i)
+        && !url.match(/^https:\/\/(www\.)?(beta\.)?shutterfly\.com\/calendars/i) 
+        && !url.match(/^https:\/\/(www\.)?photos.(.*\.)?shutterfly.com/i) 
+    ){
+        return;
+    }
+
+    var uidParam = typeof window.MasterTmsUdo.uid !== "undefined" && window.MasterTmsUdo.uid !== null ? "&uid=" + window.MasterTmsUdo.uid : "";
+
+    mcxSiteInterceptParameters.surveyURL += '&invitationURL=' + url + uidParam;
+
+    var screenWidth = window.screen.width || window.innerWidth;
+    var screenHeight = window.screen.height || window.innerHeight;
+
+    //Create the invite modal, and make sure the ID you give it is the id listed in the parameters above 
+    var mcxInviteModal = document.createElement("div");
+    mcxInviteModal.setAttribute("id", "mcxInviteModal");
+
+    // This is basically where you can construct your HTML for the invite modal. Note that the logo src should be updated for the client's logo
+    mcxInviteModal.innerHTML =
+        '<div id="mcx_invite_div">'
+        + '<div id="mcx_invite_logo_container">'
+            + '<div id="mcx_invite_logo"><img src="https://cdn.staticsfly.com/img_/ui/sitenav/imgsfly_on-v14779502040003151.png" /></div>'
+        + '</div>'
+        + '<div id="mcx_invite_top_content">'
+            + '<h2 id="mcx_invite_heading1">Please help us improve your experience</h2>'
+            + '<h2 id="mcx_invite_heading2">by taking this short survey.</h2>'
+        + '</div>'
+        + '<div id="mcx_accept" onclick="McxSiteInterceptOnExit.acceptSurvey()">Yes, I\'ll help</div>'
+        + '<div id="mcx_decline" onclick="McxSiteInterceptOnExit.declineSurvey()">X</div>'
+        + '<div id="mcx_invite_bottom_content">'
+            + '<p id="mcx_invite_words1">We appreciate your feedback.</p>'
+            + '<p id="mcx_invite_words2">The Shutterfly Team</p>'
+            + '<a id="mcx_invite_words3" href="https://www.shutterflyinc.com/privacy" target="_blank">Privacy Policy</a>'
+        + '</div>'
+        + '</div>'
+
+    // This adds the modal to the page
+    document.body.insertBefore(mcxInviteModal, document.body.firstChild);
+
+    // CSS - you can target the id's that you give your HTML above to give them CSS here
+    //gray modal background
+    document.getElementById("mcxInviteModal").style.cssText = 'background: rgba(0,0,0, .2); width: 100%; height: 100vh; position: fixed; text-align: center; cursor: default; margin: 0; padding: 0; text-indent: 0; transition: all 0.8s; z-index: 9999; display: none;'
+    //invite container
+    document.getElementById('mcx_invite_div').style.cssText = "width: 520px; position: absolute; left: calc(50% - 260px); top: calc(50% - 190px); font-weight: normal; background: #fff; color: black; font-family: Calibri, Candara, Segoe, sans-serif; padding-bottom: 35px;"
+    //logo and logo words
+    document.getElementById('mcx_invite_logo_container').style.cssText = "width: 100%; height: 80px; position: relative; padding-top: 20px;"
+    document.getElementById('mcx_invite_logo').style.cssText = "width: 138px; height: 29px; margin: 0 auto;"
+    //top words
+    document.getElementById("mcx_invite_top_content").style.cssText = "width: 520px; position: relative; padding: 10px 10px 10px 10px; text-align: center; font-size: 16px;"
+    document.getElementById('mcx_invite_heading1').style.cssText = "font-size: 21px; line-height: 21px; font-weight: normal; margin: 0px 0px 3px 0px;"
+    document.getElementById('mcx_invite_heading2').style.cssText = "font-size: 21px; line-height: 21px; font-weight: normal; margin: 0;"
+    // Buttons
+    document.getElementById("mcx_accept").style.cssText = "width: 184px; height: 45px; line-height: 45px; font-size: 20px; background: #f05323; color: #eee; margin: 10px auto; cursor: pointer; font-weight: normal;"
+    document.getElementById("mcx_decline").style.cssText = "width: 25px; height: 25px; line-height: 26px; font-size: 20px; color: #000; position: absolute; right: 10px; top: 10px; cursor: pointer; font-weight: bold;"
+    //bottom words and privacy policy
+    document.getElementById("mcx_invite_bottom_content").style.cssText = "width: 520px; position: relative; padding: 10px 10px 10px 10px; text-align: center; font-size: 12px;"
+    document.getElementById('mcx_invite_words1').style.cssText = "font-weight: normal; font-size: 20px; line-height: 20px; position: relative; margin: 0;"
+    document.getElementById('mcx_invite_words2').style.cssText = "font-weight: normal; font-size: 20px; line-height: 20px; position: relative; margin: 0px 0px 10px 0px;"
+    document.getElementById('mcx_invite_words3').style.cssText = "color: #000; position: relative; margin: 0;"
+
+    if (screenWidth < 750){
+        // Mobile sized invite
+        document.getElementById('mcx_invite_div').style.transform = 'scale(0.6)';
+        mcxSiteInterceptParameters.width = screenWidth - 100;
+        mcxSiteInterceptParameters.height = screenHeight - 100;
+    }
+
+    setTimeout(function () {
+        if (!sessionStorage.mcxRandom && McxSiteInterceptOnExit && McxSiteInterceptOnExit.onPageLoad) {
+            McxSiteInterceptOnExit.onPageLoad();
+        }
+    }, 2000)
+
+}
+
+window.mcxAddModal();
+
+
+/* 
+https://shutterfly.allegiancetech.com/cgi-bin/qwebcorporate.dll?idx=G3VG8F&preview=1&design=1&invitationURL=https://shutterfly.com/cards-stationery
+https://shutterfly.allegiancetech.com/cgi-bin/qwebcorporate.dll?idx=G3VG8F&preview=1&design=1&invitationURL=https://shutterfly.com/photo-books
+https://shutterfly.allegiancetech.com/cgi-bin/qwebcorporate.dll?idx=G3VG8F&preview=1&design=1&invitationURL=https://photos.shutterfly.com
+*/
+
+// Any custom work that needs to be done for the survey itself shouldn't use jQuery since the client's website might not have jQuery on it.
+// This function acts like the $(document).ready(), but is plain javaScript, so it will be compatible with every website.
+function r(){
+    if (/in/.test(document.readyState)){
+        setTimeout(r, 9);
+    }else{
+        documentReady();
+    }
+}
+r();
+
+function documentReady(){     
+    if ( window.jQuery && document.getElementById('canvas') ) {  
+
+        var screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+        var curPage = parseInt($('input[name=currentpage]').val(), 10);
+
+        if (curPage === 1){
+            // Get browser and OS info when page loads
+            var browser = getBrowser();
+            var os = getOS();
+            $("#Browser_Name").val(browser.name);
+            $("#Browser_Version").val(browser.version);
+            $("#OS_Name").val(os.name);
+            $("#OS_Version").val(os.version);
+
+            $('.nextButton').unbind();
+            $('.nextButton').click(function(){
+                markInvitationUrlPrepop();
+                nextButtonClicked();
+            })
+
+            function markInvitationUrlPrepop(){
+                var invitationURL = $('#InvitationURL').val();
+
+                /******************** Remove 'beta' from URL patterns for production ********************/
+                // Looks for certain patterns in the URL so we can ask specific questions based on that
+                if (invitationURL.match(/^https:\/\/(www\.)?(beta\.)?shutterfly\.com\/cards-stationery/i)){
+                    $('#Path_question > table > tbody > tr > td > table > tbody > tr:nth-child(1) > td.ControlCell > div > ins').click()
+                    $('#InvitedURL_question > table > tbody > tr > td > table > tbody > tr:nth-child(1) > td.ControlCell > div > ins').click()      
+                }else if (invitationURL.match(/^https:\/\/(www\.)?(beta\.)?shutterfly\.com\/tinyprints/i)){
+                    $('#Path_question > table > tbody > tr > td > table > tbody > tr:nth-child(1) > td.ControlCell > div > ins').click();
+                }else if (invitationURL.match(/^https:\/\/(www\.)?(beta\.)?shutterfly\.com\/wedding/i)){
+                    $('#Path_question > table > tbody > tr > td > table > tbody > tr:nth-child(1) > td.ControlCell > div > ins').click();
+                    $('#InvitedURL_question > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td.ControlCell > div > ins').click();
+                }else if (invitationURL.match(/^https:\/\/(www\.)?(beta\.)?shutterfly\.com\/personalized-gifts/i)){
+                    $('#Path_question > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td.ControlCell > div > ins').click();
+                    $('#InvitedURL_question > table > tbody > tr > td > table > tbody > tr:nth-child(4) > td.ControlCell > div > ins').click();
+                }else if (invitationURL.match(/^https:\/\/(www\.)?(beta\.)?shutterfly\.com\/photo-gifts/i)){
+                    $('#Path_question > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td.ControlCell > div > ins').click();
+                    $('#InvitedURL_question > table > tbody > tr > td > table > tbody > tr:nth-child(4) > td.ControlCell > div > ins').click();
+                }else if (invitationURL.match(/^https:\/\/(www\.)?(beta\.)?shutterfly\.com\/pets/i)){
+                    $('#Path_question > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td.ControlCell > div > ins').click(); 
+                    $('#InvitedURL_question > table > tbody > tr > td > table > tbody > tr:nth-child(5) > td.ControlCell > div > ins').click();
+                }else if (invitationURL.match(/^https:\/\/(www\.)?(beta\.)?shutterfly\.com\/kids/i)){
+                    $('#Path_question > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td.ControlCell > div > ins').click();
+                    $('#InvitedURL_question > table > tbody > tr > td > table > tbody > tr:nth-child(6) > td.ControlCell > div > ins').click(); 
+                }else if (invitationURL.match(/^https:\/\/(www\.)?(beta\.)?shutterfly\.com\/home-decor/i)){
+                    $('#Path_question > table > tbody > tr > td > table > tbody > tr:nth-child(3) > td.ControlCell > div > ins').click();
+                    $('#InvitedURL_question > table > tbody > tr > td > table > tbody > tr:nth-child(7) > td.ControlCell > div > ins').click();
+                }else if (invitationURL.match(/^https:\/\/(www\.)?(beta\.)?shutterfly\.com\/prints/i)){
+                    $('#Path_question > table > tbody > tr > td > table > tbody > tr:nth-child(4) > td.ControlCell > div > ins').click();
+                    $('#InvitedURL_question > table > tbody > tr > td > table > tbody > tr:nth-child(8) > td.ControlCell > div > ins').click();
+                }else if (invitationURL.match(/^https:\/\/(www\.)?(beta\.)?shutterfly\.com\/photo-books/i)){
+                    $('#Path_question > table > tbody > tr > td > table > tbody > tr:nth-child(5) > td.ControlCell > div > ins').click();
+                    $('#InvitedURL_question > table > tbody > tr > td > table > tbody > tr:nth-child(9) > td.ControlCell > div > ins').click();
+                }else if (invitationURL.match(/^https:\/\/(www\.)?(beta\.)?shutterfly\.com\/calendars/i)){
+                    $('#Path_question > table > tbody > tr > td > table > tbody > tr:nth-child(6) > td.ControlCell > div > ins').click();
+                    $('#InvitedURL_question > table > tbody > tr > td > table > tbody > tr:nth-child(10) > td.ControlCell > div > ins').click();
+                }else if (invitationURL.match(/^https:\/\/(www\.)?photos.(.*\.)?shutterfly.com/i)){
+                    $('#Path_question > table > tbody > tr > td > table > tbody > tr:nth-child(7) > td.ControlCell > div > ins').click();
+                    $('#InvitedURL_question > table > tbody > tr > td > table > tbody > tr:nth-child(11) > td.ControlCell > div > ins').click();
+                }
+            }
+        }
+
+        if (curPage == 4){
+            if (screenWidth < 570) {
+                $('#Q00000031_Q00000032_A10_header').text('N/A');
+            }
+        }
+
+        if (curPage == 11){
+            if (screenWidth < 570) {
+                $('#Q000001ED_Q000001EE_A10_header').text('N/A');
+            }
+        }
+
+        if (curPage == 24) {
+            $('.nextButton').unbind();
+            $('.nextButton').click(function () {
+                $('#survey_completed_question > table > tbody > tr > td > table > tbody > tr.alt > td.ControlCell > div > ins').click();
+                nextButtonClicked();
+            });
+        }
+
+        centerHeaders("#Q00000006",10,8);
+        centerHeaders("#Q00000013",10,8);
+        centerHeaders("#Q00000030",10,8);
+        centerHeaders("#Q000001EC",10,8);
+
+    }
+}
+
+
+function centerHeaders(tableID, percent, colBet) {
+    $(tableID + '_scale_header table tbody tr td').attr('class',"ScaleHeaderCenter");
+    for (i=0; i < colBet; i++) {
+    $(tableID + '_scale_header table tbody tr td:nth-child(1)').after('<td></td>');
+    }
+    $(tableID + '_scale_header table tbody tr td').attr('style',"width:" + percent + "%;");
+}
+
+function getBrowser() {
+    var ua = navigator.userAgent;
+    $('#userAgent').val(ua);
+
+    var isOpera = !!window.opera || ua.indexOf(' OPR/') >= 0;     // Opera 8.0+ (UA detection to detect Blink/v8-powered Opera)
+    var isEdge = ua.indexOf(' Edge') >= 0;
+    var isFirefox = typeof InstallTrigger !== 'undefined';   // Firefox 1.0+
+    var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;    // At least Safari 3+: "[object HTMLElementConstructor]"
+    if (!isSafari && navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {isSafari = true}
+    var isChrome = !!window.chrome && !isOpera && !isEdge;              // Chrome 1+
+    var isIE = /*@cc_on!@*/false || !!document.documentMode;   // At least IE6
+
+    var browser = {
+        name: '',
+        version: ''
+    }
+        
+    if (isChrome) {
+        browser.name = "Chrome";
+        browser.version = ua.match(/Chrome\/(\d+)?./) ? ua.match(/Chrome\/(\d+)?./)[1] : '';
+    } else if (isIE) {
+        browser.name = "Internet Explorer";
+        if (ua.match(/rv:/)){
+            browser.version = ua.match(/rv:(\d+)/) ? ua.match(/rv:(\d+)/)[1] : '';
+        }else if (ua.match(/MSIE /)){
+            browser.version = ua.match(/MSIE (\d+)/i) ? ua.match(/MSIE (\d+)/i)[1] : '';
+        }else if (ua.match(/IE /)){
+            browser.version = ua.match(/IE (\d+)/i) ? ua.match(/IE (\d+)/i)[1] : '';
+        }
+    } else if (isFirefox) {
+        browser.name = "Firefox";
+        browser.version = ua.match(/firefox\/(\d+)/i) ? ua.match(/firefox\/(\d+)/i)[1] : '';
+    } else if (isSafari) {
+        browser.name = "Safari";
+        browser.version = ua.match(/version\/(\d+)/i) ? ua.match(/version\/(\d+)/i)[1] : '';
+    } else if (isEdge) {
+        browser.name = "Edge";
+        browser.version = ua.match(/edge\/(\d+)/i) ? ua.match(/edge\/(\d+)/i)[1] : '';
+    }else if (isOpera) {
+        browser.name = "Opera";
+        if (ua.match(/OPR/i)){
+            browser.version = ua.match(/opr\/(\d+)/i) ? ua.match(/opr\/(\d+)/i)[1] : '';
+        }else if (ua.match(/opera/i)){
+            browser.version = ua.match(/opera\/(\d+)/i) ? ua.match(/opera\/(\d+)/i)[1] : '';
+        }
+    }
+
+    return browser;
+}
+
+function getOS(){
+    var OSName = "Unknown";
+    var ua = window.navigator.userAgent;
+    if (ua.indexOf("Windows NT 10.0")!= -1) OSName="Windows 10";
+    if (ua.indexOf("Windows NT 6.2") != -1) OSName="Windows 8";
+    if (ua.indexOf("Windows NT 6.1") != -1) OSName="Windows 7";
+    if (ua.indexOf("Windows NT 6.0") != -1) OSName="Windows Vista";
+    if (ua.indexOf("Windows NT 5.1") != -1) OSName="Windows XP";
+    if (ua.indexOf("Windows NT 5.0") != -1) OSName="Windows 2000";
+    if (ua.indexOf("Mac") != -1){
+        OSName="Mac/iOS ";
+        if (ua.match(/Mac OS X (\d+_\d+(_\d+)?)/)){
+            OSName += ua.match(/Mac OS X (\d+_\d+(_\d+)?)/)[1];
+        }
+    } 
+    if (ua.indexOf("X11")            != -1) OSName="UNIX ";
+    if (ua.indexOf("Linux")          != -1) OSName="Linux ";
+    
+    OSName = OSName.split(' ');
+
+    return {
+        name: OSName[0],
+        version: OSName[1]
+    }
+}
+
+
+$(document).ready(function() {
+var curPage = parseInt($('input[name=currentpage]').val(), 10);
+
+if (curPage == 1) {
+// Finding Device Type
+$("#DeviceType_question").hide();
+
+var deviceDetector = (function ()
+{
+                var ua = navigator.userAgent.toLowerCase();
+                var detect = (function(s)
+                {
+                                if(s===undefined)s=ua;
+                                else ua = s.toLowerCase();
+                                if(/(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|playbook|silk|(puffin(?!.*(IP|AP|WP))))/.test(ua)) {
+                                return 'Tablet';
+} else if (/(mobi|ipod|phone|blackberry|opera mini|fennec|minimo|symbian|psp|nintendo ds|archos|skyfire|puffin|blazer|bolt|gobrowser|iris|maemo|semc|teashark|uzard)/.test(ua)) {           
+                                                return 'Phone';}
+                                else {return 'Desktop';}
+    });
+    return{
+        device:detect(),
+        detect:detect,
+        isMobile:((detect()!='desktop')?true:false),
+        userAgent:ua
+    };
+}());
+
+var dType = deviceDetector.device;
+if (dType == "Desktop") {
+$("#Q0014A5F7_Q0014A5F8_A1").prop("checked", true);
+} else if (dType == "Tablet") {
+$("#Q0014A5F7_Q0014A5F8_A2").prop("checked", true);
+} else if (dType == "Phone") {
+$("#Q0014A5F7_Q0014A5F8_A3").prop("checked", true);
+}
+}
+});
